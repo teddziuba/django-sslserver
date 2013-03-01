@@ -22,6 +22,10 @@ Start a SSL-enabled debug server::
 
   $ python manage.py runsslserver
 
+
+You'll now be able to access your Django app on https://localhost:8000/
+
+
 The `runsslserver` command has the same syntax as `runserver`, except that it will
 let you specify the server certificate and key.
 
