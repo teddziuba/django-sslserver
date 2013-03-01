@@ -1,7 +1,7 @@
 from distutils.core import setup
 
 setup(name="django-sslserver",
-      version="0.1",
+      version="0.11",
       author="Ted Dziuba",
       author_email="tjdziuba@gmail.com",
       description="An SSL-enabled development server for Django",
@@ -15,4 +15,5 @@ setup(name="django-sslserver",
                                   "certs/server.csr"]},
       install_requires=["setuptools",
                         "Django >= 1.4"],
+      license="MIT"
       )
