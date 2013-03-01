@@ -18,7 +18,7 @@ Add the application to your `INSTALLED_APPS`::
   ...
   )
 
-Start a SSL-enabled debug server:
+Start a SSL-enabled debug server::
 
   $ python manage.py runsslserver
 
