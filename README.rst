@@ -48,3 +48,8 @@ you can tell Django SSL Server to use it with the following arguments::
 
   $ python manage.py runsslserver --certificate /path/to/certificate.crt --key /path/to/key.key
 
+
+Getting Involved
+================
+
+Feel free to open pull requests or issues. GitHub is the canonical location of this project.
