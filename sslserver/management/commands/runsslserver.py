@@ -10,8 +10,12 @@ from django.core.servers.basehttp import WSGIServerException
 from django.core.management.base import CommandError
 from django.core.management.commands import runserver
 from django.utils.importlib import import_module
-from django.utils._os import upath
-
+from django import get_version
+major,minor,release = get_version().split('.')
+if int(minor) >= 5:
+    from django.utils._os import upath
+else:
+    upath = unicode
 
 class SecureHTTPServer(WSGIServer):
     def __init__(self, address, handler_cls, certificate, key):
