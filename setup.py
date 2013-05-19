@@ -1,7 +1,8 @@
 from distutils.core import setup
+import sslserver
 
 setup(name="django-sslserver",
-      version="0.11",
+      version=sslserver.__version__,
       author="Ted Dziuba",
       author_email="tjdziuba@gmail.com",
       description="An SSL-enabled development server for Django",
