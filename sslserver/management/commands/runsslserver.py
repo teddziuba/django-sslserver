@@ -6,12 +6,17 @@ import sys
 
 from django.core.servers.basehttp import WSGIRequestHandler
 from django.core.servers.basehttp import WSGIServer
-from django.core.servers.basehttp import WSGIServerException
 from django.core.management.base import CommandError
 from django.core.management.commands import runserver
 from django.utils.importlib import import_module
 from django import get_version
-major,minor,release = get_version().split('.')
+
+try:
+    from django.core.servers.basehttp import WSGIServerException
+except ImportError:
+    from socket import error as WSGIServerException
+
+minor = get_version().split('.')[1]
 if int(minor) >= 5:
     from django.utils._os import upath
 else:
