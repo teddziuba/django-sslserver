@@ -11,7 +11,7 @@ from django.core.management.base import CommandError
 from django.core.management.commands import runserver
 from django.utils.importlib import import_module
 from django import get_version
-major,minor,release = get_version().split('.')
+major,minor = get_version().split('.')[:2]   # get_release can return x.y.z as also x.y
 if int(minor) >= 5:
     from django.utils._os import upath
 else:
