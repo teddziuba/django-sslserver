@@ -1,5 +1,6 @@
 from datetime import datetime
 from optparse import make_option
+from distutils.version import StrictVersion
 import os
 import ssl
 import sys
@@ -16,8 +17,7 @@ try:
 except ImportError:
     from socket import error as WSGIServerException
 
-minor = get_version().split('.')[1]
-if int(minor) >= 5:
+if StrictVersion(get_version()) >= StrictVersion('1.5'):
     from django.utils._os import upath
 else:
     upath = unicode
