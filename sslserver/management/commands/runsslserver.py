@@ -9,6 +9,7 @@ from django.core.servers.basehttp import WSGIRequestHandler
 from django.core.servers.basehttp import WSGIServer
 from django.core.management.base import CommandError
 from django.core.management.commands import runserver
+from django.contrib.staticfiles.handlers import StaticFilesHandler
 from django.utils.importlib import import_module
 from django import get_version
 
@@ -50,6 +51,20 @@ class Command(runserver.Command):
     )
 
     help = "Run a Django development server over HTTPS"
+
+    def get_handler(self, *args, **options):
+        """
+        Returns the static files serving handler wrapping the default handler,
+        if static files should be served. Otherwise just returns the default
+        handler.
+
+        """
+        handler = super(Command, self).get_handler(*args, **options)
+        use_static_handler = options.get('use_static_handler', True)
+        insecure_serving = options.get('insecure_serving', False)
+        if use_static_handler:
+            return StaticFilesHandler(handler)
+        return handler
 
     def check_certs(self, key_file, cert_file):
         # TODO: maybe validate these? wrap_socket doesn't...
