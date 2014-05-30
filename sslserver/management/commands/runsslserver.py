@@ -31,6 +31,14 @@ class SecureHTTPServer(WSGIServer):
                                       ssl_version=ssl.PROTOCOL_SSLv3,
                                       cert_reqs=ssl.CERT_NONE)
 
+
+class WSGIRequestHandler(WSGIRequestHandler):
+    def get_environ(self):
+        env = super(WSGIRequestHandler, self).get_environ()
+        env['HTTPS'] = 'on'
+        return env
+
+
 def default_ssl_files_dir():
     app_module = import_module("sslserver")
     mod_path = os.path.dirname(upath(app_module.__file__))
