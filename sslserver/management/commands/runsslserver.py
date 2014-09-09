@@ -130,7 +130,8 @@ class Command(runserver.Command):
             server.set_app(handler)
             server.serve_forever()
 
-        except WSGIServerException, e:
+        except WSGIServerException:
+            e = sys.exc_info()[1]
             # Use helpful error messages instead of ugly tracebacks.
             ERRORS = {
                 13: "You don't have permission to access that port.",
