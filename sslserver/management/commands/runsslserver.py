@@ -55,7 +55,11 @@ class Command(runserver.Command):
         make_option("--key",
                     default=os.path.join(default_ssl_files_dir(),
                                          "development.key"),
-                    help="Path to the key file")
+                    help="Path to the key file"),
+        make_option("--nostatic", dest='use_static_handler',
+                    action='store_false', default=None),
+        make_option("--static", dest='use_static_handler',
+                    action='store_true')
     )
 
     help = "Run a Django development server over HTTPS"
@@ -68,11 +72,22 @@ class Command(runserver.Command):
 
         """
         handler = super(Command, self).get_handler(*args, **options)
-        use_static_handler = options.get('use_static_handler', True)
         insecure_serving = options.get('insecure_serving', False)
-        if use_static_handler:
+        if self.should_use_static_handler(options):
             return StaticFilesHandler(handler)
         return handler
+
+    def should_use_static_handler(self, options):
+        # it's a bit weird to import settings in the middle of the method, but
+        # this is what inner_run does
+        from django.conf import settings
+        use_static_handler = options.get('use_static_handler')
+        if use_static_handler:
+            return True
+        if (use_static_handler is None and
+            'django.contrib.staticfiles' in settings.INSTALLED_APPS):
+            return True
+        return False
 
     def check_certs(self, key_file, cert_file):
         # TODO: maybe validate these? wrap_socket doesn't...
