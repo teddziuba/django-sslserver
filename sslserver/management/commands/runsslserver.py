@@ -10,7 +10,6 @@ from django.core.servers.basehttp import WSGIServer
 from django.core.management.base import CommandError
 from django.core.management.commands import runserver
 from django.contrib.staticfiles.handlers import StaticFilesHandler
-from django.utils.importlib import import_module
 from django import get_version
 
 try:
@@ -40,7 +39,7 @@ class WSGIRequestHandler(WSGIRequestHandler):
 
 
 def default_ssl_files_dir():
-    app_module = import_module("sslserver")
+    import sslserver as app_module
     mod_path = os.path.dirname(upath(app_module.__file__))
     ssl_dir = os.path.join(mod_path, "certs")
     return ssl_dir
