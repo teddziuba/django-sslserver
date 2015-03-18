@@ -47,6 +47,9 @@ def default_ssl_files_dir():
 
 class Command(runserver.Command):
     option_list = runserver.Command.option_list + (
+        make_option("--addrport",                                    
+                    default="127.0.0.1:8000",                                
+                    help="Set Custom address/port (Default:127.0.0.1:8000)"),
         make_option("--certificate",
                     default=os.path.join(default_ssl_files_dir(),
                                          "development.crt"),
