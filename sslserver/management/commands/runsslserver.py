@@ -59,7 +59,9 @@ class Command(runserver.Command):
                                          "development.key"),
                     help="Path to the key file"),
         make_option("--nostatic", dest='use_static_handler',
-                    action='store_false', default=None),
+                    action='store_false', default=None,
+                    help="Don't use StaticFilesHandler. Use this if using a "
+                         "third-party handler (e.g., WhiteNoise)."),
         make_option("--static", dest='use_static_handler',
                     action='store_true')
     )

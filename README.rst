@@ -49,6 +49,13 @@ you can tell Django SSL Server to use it with the following arguments::
   $ python manage.py runsslserver --certificate /path/to/certificate.crt --key /path/to/key.key
 
 
+Third-Party Static File Handlers
+================================
+
+If you're using a wrapper around your WSGI application such as dj_static or WhiteNoise, you probably want to let it handle serving
+static files. Otherwise, you may see 404s when requesting static files. You can disable the default behavior by using the ``--nostatic``
+option.
+
 Getting Involved
 ================
 
