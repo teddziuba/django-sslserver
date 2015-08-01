@@ -46,25 +46,23 @@ def default_ssl_files_dir():
 
 
 class Command(runserver.Command):
-    option_list = runserver.Command.option_list + (
-        make_option("--addrport",                                    
-                    default="127.0.0.1:8000",                                
-                    help="Set Custom address/port (Default:127.0.0.1:8000)"),
-        make_option("--certificate",
-                    default=os.path.join(default_ssl_files_dir(),
-                                         "development.crt"),
-                    help="Path to the certificate"),
-        make_option("--key",
-                    default=os.path.join(default_ssl_files_dir(),
-                                         "development.key"),
-                    help="Path to the key file"),
-        make_option("--nostatic", dest='use_static_handler',
-                    action='store_false', default=None,
-                    help="Don't use StaticFilesHandler. Use this if using a "
-                         "third-party handler (e.g., WhiteNoise)."),
-        make_option("--static", dest='use_static_handler',
-                    action='store_true')
-    )
+    def add_arguments(self, parser):
+        super(Command, self).add_arguments(parser)
+        parser.add_argument("--addrport",
+                            default="127.0.0.1:8000",
+                            help="Set Custom address/port (Default:127.0.0.1:8000)"),
+        parser.add_argument("--certificate",
+                            default=os.path.join(default_ssl_files_dir(),
+                                "development.crt"),
+                            help="Path to the certificate"),
+        parser.add_argument("--key",
+                            default=os.path.join(default_ssl_files_dir(),
+                                "development.key"),
+                            help="Path to the key file"),
+        parser.add_argument("--nostatic", dest='use_static_handler',
+                            action='store_false', default=None),
+        parser.add_argument("--static", dest='use_static_handler',
+                            action='store_true'),
 
     help = "Run a Django development server over HTTPS"
 
