@@ -1,3 +1,4 @@
 lint
 *.pyc
-build/
+dist
+MANIFEST
