@@ -113,7 +113,7 @@ class Command(runserver.Command):
         quit_command = (sys.platform == 'win32') and 'CTRL-BREAK' or 'CONTROL-C'
 
         self.stdout.write("Validating models...\n\n")
-        self.validate(display_num_errors=True)
+        self.check(display_num_errors=True)
         self.stdout.write((
             "%(started_at)s\n"
             "Django version %(version)s, using settings %(settings)r\n"
