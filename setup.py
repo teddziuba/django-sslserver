@@ -15,6 +15,6 @@ setup(name="django-sslserver",
                                   "certs/development.key",
                                   "certs/server.csr"]},
       install_requires=["setuptools",
-                        "Django >= 1.4"],
+                        "Django >= 1.8"],
       license="MIT"
       )
