@@ -20,10 +20,13 @@ Add the application to your `INSTALLED_APPS`::
 
 Start a SSL-enabled debug server::
 
-  $ python manage.py runsslserver [--addrport 127.0.0.1:9000]
+  $ python manage.py runsslserver
 
+and access app on https://localhost:8000 or start server on specified port::
 
-You'll now be able to access your Django app on https://localhost:8000/
+  $ python manage.py runsslserver 127.0.0.1:9000
+
+You'll now be able to access your Django app on https://localhost:9000/
 
 
 Browser Certificate Errors
