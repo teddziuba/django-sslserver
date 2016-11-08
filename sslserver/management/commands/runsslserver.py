@@ -27,7 +27,7 @@ class SecureHTTPServer(WSGIServer):
         super(SecureHTTPServer, self).__init__(address, handler_cls)
         self.socket = ssl.wrap_socket(self.socket, certfile=certificate,
                                       keyfile=key, server_side=True,
-                                      ssl_version=ssl.PROTOCOL_TLSv1,
+                                      ssl_version=ssl.PROTOCOL_TLSv1_2,
                                       cert_reqs=ssl.CERT_NONE)
 
 
