@@ -57,9 +57,11 @@ class Command(runserver.Command):
                                 "development.key"),
                             help="Path to the key file"),
         parser.add_argument("--nostatic", dest='use_static_handler',
-                            action='store_false', default=None),
+                            action='store_false', default=None,
+                            help="Do not use internal static file handler"),
         parser.add_argument("--static", dest='use_static_handler',
-                            action='store_true'),
+                            action='store_true',
+                            help="Use internal static file handler"),
 
     help = "Run a Django development server over HTTPS"
 
