@@ -2,3 +2,4 @@ lint
 *.pyc
 dist
 MANIFEST
+.idea
