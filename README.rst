@@ -2,6 +2,12 @@
 Django SSL Server
 =================
 
+.. image:: https://img.shields.io/pypi/v/django-sslserver.svg
+    :target: https://pypi.python.org/pypi/django-sslserver
+
+.. image:: https://img.shields.io/pypi/pyversions/django-sslserver.svg
+    :target: https://pypi.python.org/pypi/django-sslserver/
+
 Django SSL Server is a SSL-enabled development server for the Django Framework.
 
 Please note that this `should not be used for production setups
