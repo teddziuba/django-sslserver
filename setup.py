@@ -1,4 +1,5 @@
-from distutils.core import setup
+#!/usr/bin/env python
+from setuptools import setup, find_packages
 import sslserver
 
 setup(name="django-sslserver",
@@ -7,16 +8,10 @@ setup(name="django-sslserver",
       author_email="tjdziuba@gmail.com",
       description="An SSL-enabled development server for Django",
       url="https://github.com/teddziuba/django-sslserver",
-      packages=["sslserver",
-                "sslserver.management",
-                "sslserver.management.commands"],
-      package_dir={"sslserver": "sslserver"},
-      package_data={"sslserver": ["certs/development.crt",
-                                  "certs/development.key"]},
-      install_requires=["setuptools",
-                        "Django >= 1.8"],
+      packages=find_packages(exclude=['demo']),
+      include_package_data=True,
+      install_requires=["Django >= 1.8"],
       license="MIT",
-
       classifiers=[
           "Environment :: Web Environment",
           "License :: OSI Approved :: MIT License",

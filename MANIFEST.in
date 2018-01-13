@@ -1,0 +1,9 @@
+include *.txt
+include AUTHORS
+include LICENSE
+include README.rst
+recursive-include sslserver development.*
+
+recursive-exclude demo *
+global-exclude *.pyc *.pyo
+global-exclude .git
