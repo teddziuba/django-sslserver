@@ -1,5 +1,10 @@
 lint
-*.pyc
+*.py[co]
+__pycache__
 dist
 MANIFEST
 .idea
+venv/
+*.sw[po]
+django_sslserver.egg-info/
+build/
