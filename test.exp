@@ -1,0 +1,8 @@
+#!/usr/bin/expect
+
+spawn python demo/manage.py runsslserver
+
+expect "Starting development server at https://127.0.0.1:8000/"
+expect "Quit the server with CONTROL-C."
+
+send "\x03"
