@@ -22,13 +22,14 @@ if LooseVersion(get_version()) >= LooseVersion('1.5'):
 else:
     upath = unicode
 
+
 class SecureHTTPServer(WSGIServer):
-    def __init__(self, address, handler_cls, certificate, key):
+    def __init__(self, address, handler_cls, certificate, key, ca_certificate=None):
         super(SecureHTTPServer, self).__init__(address, handler_cls)
         self.socket = ssl.wrap_socket(self.socket, certfile=certificate,
                                       keyfile=key, server_side=True,
                                       ssl_version=ssl.PROTOCOL_TLSv1_2,
-                                      cert_reqs=ssl.CERT_NONE)
+                                      cert_reqs=ssl.CERT_NONE, ca_certs=ca_certificate)
 
 
 class WSGIRequestHandler(WSGIRequestHandler):
@@ -56,6 +57,9 @@ class Command(runserver.Command):
                             default=os.path.join(default_ssl_files_dir(),
                                 "development.key"),
                             help="Path to the key file"),
+        parser.add_argument("--caCertificate",
+                            default=None,  # TODO: add default trusted CA certificate, None for now
+                            help="Path to the ca certificate"),
         parser.add_argument("--nostatic", dest='use_static_handler',
                             action='store_false', default=None,
                             help="Do not use internal static file handler"),
@@ -90,7 +94,7 @@ class Command(runserver.Command):
             return True
         return False
 
-    def check_certs(self, key_file, cert_file):
+    def check_certs(self, key_file, cert_file, ca_cert_file=None):
         # TODO: maybe validate these? wrap_socket doesn't...
 
         if not os.path.exists(key_file):
@@ -98,14 +102,18 @@ class Command(runserver.Command):
         if not os.path.exists(cert_file):
             raise CommandError("Can't find certificate at %s" %
                                cert_file)
-
+        if ca_cert_file is not None and not os.path.exists(ca_cert_file):
+            raise CommandError("Can't find CA certificate at %s" %
+                               ca_cert_file)
 
     def inner_run(self, *args, **options):
         # Django did a shitty job abstracting this.
 
         key_file = options.get("key")
         cert_file = options.get("certificate")
-        self.check_certs(key_file, cert_file)
+        ca_cert_file = options.get("caCertificate")
+
+        self.check_certs(key_file, cert_file, ca_cert_file)
 
         from django.conf import settings
         from django.utils import translation
@@ -122,6 +130,7 @@ class Command(runserver.Command):
             "Starting development server at https://%(addr)s:%(port)s/\n"
             "Using SSL certificate: %(cert)s\n"
             "Using SSL key: %(key)s\n"
+            "Using CA certificate: %(ca_cert)s\n"
             "Quit the server with %(quit_command)s.\n"
         ) % {
             "started_at": datetime.now().strftime('%B %d, %Y - %X'),
@@ -131,7 +140,8 @@ class Command(runserver.Command):
             "port": self.port,
             "quit_command": quit_command,
             "cert": cert_file,
-            "key": key_file
+            "key": key_file,
+            "ca_cert": ca_cert_file if ca_cert_file is not None else "no trusted CA certificate specified"
         })
         # django.core.management.base forces the locale to en-us. We should
         # set it up correctly for the first request (particularly important
@@ -142,7 +152,7 @@ class Command(runserver.Command):
             handler = self.get_handler(*args, **options)
             server = SecureHTTPServer((self.addr, int(self.port)),
                                       WSGIRequestHandler,
-                                      cert_file, key_file)
+                                      cert_file, key_file, ca_certificate=ca_cert_file)
             server.set_app(handler)
             server.serve_forever()
 
