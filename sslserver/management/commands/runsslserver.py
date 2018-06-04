@@ -32,6 +32,38 @@ class SecureHTTPServer(WSGIServer):
                                       cert_reqs=ssl.CERT_NONE, ca_certs=ca_certificate)
 
 
+class ThreadedSecureHTTPServer(SecureHTTPServer):
+    def __init__(self, address, handler_cls, certificate, key, ca_certificate=None):
+        super(ThreadedSecureHTTPServer, self).__init__(address, handler_cls, certificate, key, ca_certificate)
+        # thread executor with 10 thread for now
+        from concurrent.futures import ThreadPoolExecutor
+        self.max_thread_in_pool = 10
+        self._thread_executor = ThreadPoolExecutor(self.max_thread_in_pool)
+
+    def _handle_request_noblock(self):
+        """Handle one request in separate thread, without blocking.
+
+        I assume that selector.select() has returned that the socket is
+        readable before this function was called, so there should be no risk of
+        blocking in get_request().
+        """
+        try:
+            request, client_address = self.get_request()
+        except OSError:
+            return
+        self._thread_executor.submit(self._handle_request_in_separate_thread, request, client_address)
+
+    def _handle_request_in_separate_thread(self, request, client_address):
+        if self.verify_request(request, client_address):
+            try:
+                self.process_request(request, client_address)
+            except:
+                self.handle_error(request, client_address)
+                self.shutdown_request(request)
+        else:
+            self.shutdown_request(request)
+
+
 class WSGIRequestHandler(WSGIRequestHandler):
     def get_environ(self):
         env = super(WSGIRequestHandler, self).get_environ()
@@ -150,9 +182,14 @@ class Command(runserver.Command):
 
         try:
             handler = self.get_handler(*args, **options)
-            server = SecureHTTPServer((self.addr, int(self.port)),
+            # server = SecureHTTPServer((self.addr, int(self.port)),
+            #                           WSGIRequestHandler,
+            #                           cert_file, key_file, ca_certificate=ca_cert_file)
+
+            server = ThreadedSecureHTTPServer((self.addr, int(self.port)),
                                       WSGIRequestHandler,
                                       cert_file, key_file, ca_certificate=ca_cert_file)
+
             server.set_app(handler)
             server.serve_forever()
 
