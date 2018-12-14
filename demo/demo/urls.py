@@ -1,10 +1,16 @@
-from django.conf.urls import patterns, include, url
+from django.conf.urls import url
+from django.shortcuts import render
+
+
+def home(request):
+    return render(request, 'home.html')
 
 # Uncomment the next two lines to enable the admin:
 # from django.contrib import admin
 # admin.autodiscover()
 
-urlpatterns = patterns('',
+urlpatterns = [
+    url('', home),
     # Examples:
     # url(r'^$', 'demo.views.home', name='home'),
     # url(r'^demo/', include('demo.foo.urls')),
@@ -14,4 +20,4 @@ urlpatterns = patterns('',
 
     # Uncomment the next line to enable the admin:
     # url(r'^admin/', include(admin.site.urls)),
-)
+]
