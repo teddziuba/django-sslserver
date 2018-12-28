@@ -13,7 +13,7 @@ Django SSL Server is a SSL-enabled development server for the Django Framework.
 Please note that this `should not be used for production setups
 <https://docs.djangoproject.com/en/1.11/ref/django-admin/#runserver>`_. This
 app is intended for special use-cases. Most people should instead do a proper
-`production deplyoment
+`production deployment
 <https://docs.djangoproject.com/en/1.11/howto/deployment/>`_ where a real
 webserver such as Apache or NGINX handles SSL.
 
