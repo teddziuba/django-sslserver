@@ -23,8 +23,8 @@ else:
     upath = unicode
 
 class SecureHTTPServer(WSGIServer):
-    def __init__(self, address, handler_cls, certificate, key):
-        super(SecureHTTPServer, self).__init__(address, handler_cls)
+    def __init__(self, address, handler_cls, certificate, key, ipv6=False):
+        super(SecureHTTPServer, self).__init__(address, handler_cls, ipv6=ipv6)
         self.socket = ssl.wrap_socket(self.socket, certfile=certificate,
                                       keyfile=key, server_side=True,
                                       ssl_version=ssl.PROTOCOL_TLSv1_2,
@@ -142,7 +142,7 @@ class Command(runserver.Command):
             handler = self.get_handler(*args, **options)
             server = SecureHTTPServer((self.addr, int(self.port)),
                                       WSGIRequestHandler,
-                                      cert_file, key_file)
+                                      cert_file, key_file, ipv6=self.use_ipv6)
             server.set_app(handler)
             server.serve_forever()
 
