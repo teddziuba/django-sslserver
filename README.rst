@@ -38,6 +38,10 @@ Start a SSL-enabled debug server::
 and access app on https://localhost:8000 or start server on specified port::
 
   $ python manage.py runsslserver 127.0.0.1:9000
+  
+IPv6 support::
+
+  $ python manage.py runsslserver -6 [::]:7443
 
 You'll now be able to access your Django app on https://localhost:9000/
 
