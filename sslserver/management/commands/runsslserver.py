@@ -6,7 +6,7 @@ import ssl
 import sys
 
 from django.core.servers.basehttp import WSGIRequestHandler
-from django.core.servers.basehttp import WSGIServer
+from django.core.servers.basehttp import ThreadedWSGIServer
 from django.core.management.base import CommandError
 from django.core.management.commands import runserver
 from django.contrib.staticfiles.handlers import StaticFilesHandler
@@ -22,7 +22,7 @@ if LooseVersion(get_version()) >= LooseVersion('1.5'):
 else:
     upath = unicode
 
-class SecureHTTPServer(WSGIServer):
+class SecureHTTPServer(ThreadedWSGIServer):
     def __init__(self, address, handler_cls, certificate, key, ipv6=False):
         super(SecureHTTPServer, self).__init__(address, handler_cls, ipv6=ipv6)
         self.socket = ssl.wrap_socket(self.socket, certfile=certificate,
