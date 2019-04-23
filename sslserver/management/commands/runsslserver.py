@@ -1,26 +1,23 @@
 from datetime import datetime
-from optparse import make_option
-from distutils.version import LooseVersion
+
 import os
 import ssl
 import sys
 
+from django.utils._os import upath
 from django.core.servers.basehttp import WSGIRequestHandler
 from django.core.servers.basehttp import ThreadedWSGIServer
 from django.core.management.base import CommandError
 from django.core.management.commands import runserver
 from django.contrib.staticfiles.handlers import StaticFilesHandler
-from django import get_version
+
 
 try:
     from django.core.servers.basehttp import WSGIServerException
 except ImportError:
     from socket import error as WSGIServerException
 
-if LooseVersion(get_version()) >= LooseVersion('1.5'):
-    from django.utils._os import upath
-else:
-    upath = unicode
+
 
 class SecureHTTPServer(ThreadedWSGIServer):
     def __init__(self, address, handler_cls, certificate, key, ipv6=False):
