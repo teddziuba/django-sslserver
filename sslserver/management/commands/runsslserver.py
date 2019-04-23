@@ -6,7 +6,6 @@ import sys
 
 from django.utils._os import upath
 from django.core.servers.basehttp import WSGIRequestHandler
-from django.core.servers.basehttp import ThreadedWSGIServer
 from django.core.management.base import CommandError
 from django.core.management.commands import runserver
 from django.contrib.staticfiles.handlers import StaticFilesHandler
@@ -17,6 +16,16 @@ try:
 except ImportError:
     from socket import error as WSGIServerException
 
+try:
+    # introduced in Django 2.0
+    from django.core.servers.basehttp import ThreadedWSGIServer
+except ImportError:
+    import socketserver
+    from django.core.servers.basehttp import WSGIServer
+
+    class ThreadedWSGIServer(socketserver.ThreadingMixIn, WSGIServer):
+        """A threaded version of the WSGIServer"""
+        pass
 
 
 class SecureHTTPServer(ThreadedWSGIServer):
