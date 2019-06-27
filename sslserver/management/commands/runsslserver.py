@@ -25,7 +25,11 @@ try:
     # introduced in Django 2.0
     from django.core.servers.basehttp import ThreadedWSGIServer
 except ImportError:
-    import socketserver
+    try:
+        import socketserver
+    except ImportError:
+        # Python 2 compatibility
+        import SocketServer as socketserver
     from django.core.servers.basehttp import WSGIServer
 
     class ThreadedWSGIServer(socketserver.ThreadingMixIn, WSGIServer):
