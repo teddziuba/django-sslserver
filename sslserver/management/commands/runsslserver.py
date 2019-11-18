@@ -11,8 +11,10 @@ from django.core.management.commands import runserver
 from django.contrib.staticfiles.handlers import StaticFilesHandler
 
 
-if (sys.version_info[0] >= 3 and sys.version_info[1] >=5) or \
-        (sys.version_info[0] == 2 and sys.version_info[1] == 7 and sys.version_info[2] >= 13):
+if  (sys.version_info[0] > 3) or \
+    (sys.version_info[0] == 3 and sys.version_info[1] >= 6) or \
+    (sys.version_info[0] == 3 and sys.version_info[1] == 5 and sys.version_info[2] >= 3) or \
+    (sys.version_info[0] == 2 and sys.version_info[1] == 7 and sys.version_info[2] >= 13):
     _ssl_version = ssl.PROTOCOL_TLS
 else:
     _ssl_version = ssl.PROTOCOL_SSLv23
