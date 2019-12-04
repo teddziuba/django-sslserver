@@ -4,7 +4,12 @@ import os
 import ssl
 import sys
 
-from django.utils._os import upath
+try:
+    from pathlib import Path
+except ImportError:
+    # deprecated in django version 3
+    from django.utils._os import upath
+
 from django.core.servers.basehttp import WSGIRequestHandler
 from django.core.management.base import CommandError
 from django.core.management.commands import runserver
@@ -58,8 +63,14 @@ class WSGIRequestHandler(WSGIRequestHandler):
 
 def default_ssl_files_dir():
     import sslserver as app_module
-    mod_path = os.path.dirname(upath(app_module.__file__))
-    ssl_dir = os.path.join(mod_path, "certs")
+
+    try:
+        ssl_dir = str(Path(app_module.__file__).parent / 'certs')
+    except NameError:
+        # Django < 3 backwards compatibility
+        mod_path = os.path.dirname(upath(app_module.__file__))
+        ssl_dir = os.path.join(mod_path, "certs")
+
     return ssl_dir
 
 
