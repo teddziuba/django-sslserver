@@ -7,7 +7,7 @@ import sys
 try:
     from pathlib import Path
 except ImportError:
-    # deprecated in django version 3
+    # removed in django version 3
     from django.utils._os import upath
 
 from django.core.servers.basehttp import WSGIRequestHandler
