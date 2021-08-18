@@ -74,6 +74,16 @@ If you're using a wrapper around your WSGI application such as dj_static or Whit
 static files. Otherwise, you may see 404s when requesting static files. You can disable the default behavior by using the ``--nostatic``
 option.
 
+Testing Tools
+=============
+
+Django SSL Server adds SSL-enabled versions of
+`LiveServerTestCase <https://docs.djangoproject.com/en/3.2/topics/testing/tools/#liveservertestcase>`_ and
+`StaticLiveServerTestCase <https://docs.djangoproject.com/en/3.2/ref/contrib/staticfiles/#django.contrib.staticfiles.testing.StaticLiveServerTestCase>`_, called .
+``SecureLiveServerTestCase`` and ``SecureStaticLiveServerTestCase`` respectively.
+
+You can use these classes to write tests that involve running the code under test and consuming it with testing tools through HTTPS (e.g. Selenium, PhantomJS, etc.), for cases in which a secure connection is needed (e.g., `WebAuthn <https://developer.mozilla.org/en-US/docs/Web/API/Web_Authentication_API>`).
+
 Getting Involved
 ================
 
